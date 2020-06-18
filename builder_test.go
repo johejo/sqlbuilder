@@ -152,6 +152,7 @@ func assertQuery(t *testing.T, want, got string) {
 }
 
 func assertArgs(t *testing.T, want, got []interface{}) {
+	t.Helper()
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("failed to build args: want=%v, got=%v", want, got)
 	}
