@@ -7,9 +7,10 @@ import (
 	"strings"
 )
 
-// Builder is minimal SQL builder
+// Builder is minimal SQL builder.
 type Builder struct {
-	sb   strings.Builder
+	// B is a raw strings.Builder
+	B    strings.Builder
 	args []interface{}
 }
 
@@ -21,7 +22,7 @@ func NewBuilder(opts ...Option) *Builder {
 	}
 	var sb strings.Builder
 	return &Builder{
-		sb:   sb,
+		B:    sb,
 		args: make([]interface{}, 0, cfg.size),
 	}
 }
@@ -29,13 +30,13 @@ func NewBuilder(opts ...Option) *Builder {
 // Append appends query and args to builder.
 func (b *Builder) Append(q string, args ...interface{}) {
 	b.appendQuery(q)
-	b.sb.WriteString(" ")
+	b.B.WriteString(" ")
 	b.AppendArgs(args...)
 }
 
 func (b *Builder) appendQuery(q string) {
 	q = strings.TrimSpace(q)
-	b.sb.WriteString(q)
+	b.B.WriteString(q)
 }
 
 // AppendNoSpace appends query and args to builder without space.
@@ -60,7 +61,7 @@ func (b *Builder) Build() (string, []interface{}) {
 
 // Query returns the built query.
 func (b *Builder) Query() string {
-	return strings.TrimSuffix(b.sb.String(), " ")
+	return strings.TrimSuffix(b.B.String(), " ")
 }
 
 // Args returns the built args.
@@ -71,7 +72,7 @@ func (b *Builder) Args() []interface{} {
 // Reset resets internal buffer.
 // Call Reset when you want to reuse the Builder.
 func (b *Builder) Reset() {
-	b.sb.Reset()
+	b.B.Reset()
 	b.args = make([]interface{}, 0)
 }
 
